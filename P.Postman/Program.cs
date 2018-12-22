@@ -17,7 +17,7 @@ namespace P.Postman
             var testMember = DataToMember(data[0] + " " + data[1]);
 
             Console.WriteLine($"Created member {testMember.Name} from AD{testMember.AssemblyDistrict}/ED{testMember.ElectionDistrict}.");
-            Console.WriteLine($"Lives at {testMember.Address.AddressLineOne}.");
+            Console.WriteLine($"Lives at {testMember.Address.AddressLineOne} in Brooklyn, NY {testMember.Address.Zip}");
             Console.ReadKey();
         }
 
@@ -29,7 +29,20 @@ namespace P.Postman
             var ed = Convert.ToInt32(spaceSplit[1]);
             var gender = spaceSplit[2];
 
-            return null;
+            var genderSplit = data.Split(new string[] { gender + " " }, 2, StringSplitOptions.None);
+
+            var addressIndex = genderSplit[1].IndexOfAny("0123456789".ToCharArray());
+
+            var name = genderSplit[1].Substring(0, addressIndex - 1);
+
+            var fullAddress = genderSplit[1].Substring(addressIndex);
+            var addressInfo = fullAddress.Replace(" Brooklyn, NY ", "$").Split('$');
+
+            var address = new Address(addressInfo[0], "Brooklyn", "NY", addressInfo[1]);
+
+            var member = new CountyCommitteeMember(ad, ed, gender, name, address);
+
+            return member;
         }
     }
 }
