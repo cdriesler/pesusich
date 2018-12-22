@@ -23,10 +23,26 @@ namespace P.Postman
                 members.Add(DataToMember(data[i] + " " + data[i + 1]));
             }
 
+            var ad57members = members.Where(x => x.AssemblyDistrict == 57);
+
+            if (File.Exists(@"C:\Users\cdrie\Google Drive\politics\AD57_ED94\flyers\all addresses\output.txt")) File.Delete(@"C:\Users\cdrie\Google Drive\politics\AD57_ED94\flyers\all addresses\output.txt");
+
+            foreach (var mem in ad57members)
+            {
+                var profile = new List<string>()
+                {
+                    mem.Name,
+                    mem.Address.AddressLineOne,
+                    $"Brooklyn, NY {mem.Address.Zip}"
+                };
+
+                File.AppendAllLines(@"C:\Users\cdrie\Google Drive\politics\AD57_ED94\flyers\all addresses\output.txt", profile);
+            }
+
             //Console.WriteLine($"Created member {testMember.Name} from AD{testMember.AssemblyDistrict}/ED{testMember.ElectionDistrict}.");
             //Console.WriteLine($"Lives at {testMember.Address.AddressLineOne} in Brooklyn, NY {testMember.Address.Zip}");
 
-            Console.WriteLine(members.Count);
+            Console.WriteLine(ad57members.Count());
             Console.ReadKey();
         }
 
