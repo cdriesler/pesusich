@@ -14,10 +14,19 @@ namespace P.Postman
         {
             var data = File.ReadAllLines(@"C:\Users\cdrie\Google Drive\politics\AD57_ED94\flyers\all addresses\semi-sanitized.txt");
 
-            var testMember = DataToMember(data[0] + " " + data[1]);
+            var members = new List<CountyCommitteeMember>();
 
-            Console.WriteLine($"Created member {testMember.Name} from AD{testMember.AssemblyDistrict}/ED{testMember.ElectionDistrict}.");
-            Console.WriteLine($"Lives at {testMember.Address.AddressLineOne} in Brooklyn, NY {testMember.Address.Zip}");
+            for (int i = 0; i < data.Length; i++)
+            {
+                if (data[i].Length < 8 || data[i].Contains('/')) continue;
+
+                members.Add(DataToMember(data[i] + " " + data[i + 1]));
+            }
+
+            //Console.WriteLine($"Created member {testMember.Name} from AD{testMember.AssemblyDistrict}/ED{testMember.ElectionDistrict}.");
+            //Console.WriteLine($"Lives at {testMember.Address.AddressLineOne} in Brooklyn, NY {testMember.Address.Zip}");
+
+            Console.WriteLine(members.Count);
             Console.ReadKey();
         }
 
@@ -41,6 +50,8 @@ namespace P.Postman
             var address = new Address(addressInfo[0], "Brooklyn", "NY", addressInfo[1]);
 
             var member = new CountyCommitteeMember(ad, ed, gender, name, address);
+
+            Console.WriteLine($"Created member {member.Name} from AD{member.AssemblyDistrict}/ED{member.ElectionDistrict}.");
 
             return member;
         }
